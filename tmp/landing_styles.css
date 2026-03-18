@@ -1,0 +1,274 @@
+
+/* ── Professional Landing Page (Screenshot-Exact Styles) ── */
+
+.lp-wrapper {
+  background-color: #ffffff;
+  color: #1a1a1b;
+  min-height: 100vh;
+  font-family: "Outfit", sans-serif;
+  overflow-x: hidden;
+}
+
+.lp-nav-container {
+  position: fixed;
+  top: 2rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.lp-nav-pill {
+  background: #1e1e1e;
+  padding: 0.6rem 2rem;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.lp-logo {
+  color: #ffffff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.logo-cv-circle {
+  background: #34d399;
+  color: #1e1e1e;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+.lp-nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.lp-nav-links a {
+  color: #a1a1aa;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.lp-btn-download {
+  background: #bef264;
+  color: #1e1e1e;
+  border: none;
+  border-radius: 100px;
+  padding: 0.4rem 1.1rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.lp-hero {
+  padding-top: 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.lp-badge-secure {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 1.25rem;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #22c55e;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.lp-hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.04em;
+  max-width: 900px;
+}
+
+.lp-hero-subtitle {
+  color: #64748b;
+  max-width: 650px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+}
+
+.lp-hero-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3.5rem;
+}
+
+.lp-btn-primary {
+  background: #bef264;
+  color: #1e1e1e;
+  padding: 1.1rem 2.25rem;
+  border: none;
+  border-radius: 100px;
+  font-weight: 800;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(190, 242, 100, 0.4);
+}
+
+.lp-btn-outline {
+  padding: 1.1rem 2.25rem;
+  border-radius: 100px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #475569;
+  cursor: pointer;
+}
+
+.lp-trust-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 6rem;
+}
+
+.lp-avatar-group {
+  display: flex;
+}
+
+.lp-avatar-group img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 3px solid white;
+  margin-left: -12px;
+}
+
+.lp-hero-visual {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 6rem;
+}
+
+.lp-visual-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 550px;
+  height: 550px;
+  background: #f0fdf4;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.lp-main-img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 500px;
+}
+
+.lp-float {
+  position: absolute;
+  background: white;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+  z-index: 10;
+  text-align: left;
+}
+
+.lp-float-rating {
+  top: 15%;
+  left: 8%;
+  width: 140px;
+}
+
+.lp-float-stats {
+  bottom: 35%;
+  right: 6%;
+  width: 160px;
+}
+
+.lp-partners {
+  padding: 6rem 1rem;
+  text-align: center;
+  border-top: 1px solid #f1f5f9;
+}
+
+.lp-partner-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4rem;
+}
+
+.lp-features {
+  background: #ecfccb;
+  padding: 8rem 2rem;
+  border-radius: 40px;
+  margin: 0 2rem 5rem;
+}
+
+.lp-feature-cards {
+  display: flex;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 4rem auto 0;
+}
+
+.lp-feat-card {
+  flex: 1;
+  background: white;
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  text-align: left;
+}
+
+.lp-feat-icon {
+  width: 50px;
+  height: 50px;
+  background: #f7fee7;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #65a30d;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .lp-hero-title {
+    font-size: 2.25rem;
+  }
+  .lp-feature-cards {
+    flex-direction: column;
+  }
+}
