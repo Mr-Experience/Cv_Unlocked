@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Lock, X } from 'lucide-react';
+import { Lock, X, Loader2, CheckCircle, Eye, EyeOff } from 'lucide-react';
 
 function AdminSignUp({ onBack, onLogin, onSuccess }) {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    role: '',
     password: '',
     confirmPassword: '',
     acceptResponsibility: false
@@ -14,6 +13,9 @@ function AdminSignUp({ onBack, onLogin, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState('error');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     document.title = "Create Admin Account | CV Unlocked";
@@ -38,11 +40,13 @@ function AdminSignUp({ onBack, onLogin, onSuccess }) {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
+      setToastType('error');
       setShowToast(true);
       return;
     }
     if (!formData.acceptResponsibility) {
       setError('You must accept responsibility for admin actions');
+      setToastType('error');
       setShowToast(true);
       return;
     }
@@ -60,13 +64,20 @@ function AdminSignUp({ onBack, onLogin, onSuccess }) {
       const data = await response.json();
 
       if (data.status === 'success') {
-        onSuccess();
+        setError('Account successfully created! Redirecting to login...');
+        setToastType('success');
+        setShowToast(true);
+        setTimeout(() => {
+          onSuccess();
+        }, 2000);
       } else {
         setError(data.message || 'Signup failed');
+        setToastType('error');
         setShowToast(true);
       }
     } catch (err) {
       setError('Connection failed. Please check if the server is running.');
+      setToastType('error');
       setShowToast(true);
     } finally {
       setLoading(false);
@@ -84,11 +95,6 @@ function AdminSignUp({ onBack, onLogin, onSuccess }) {
 
       <main className="sa-login-main-container">
         <div className="sa-form-card sa-signup-card-extended">
-          {/* Logo at top of card per screenshot */}
-          <div className="sa-logo-brand" style={{ marginBottom: '1rem', fontSize: '1.75rem' }}>
-            <span className="logo-cv">CV</span>
-            <span className="logo-unlocked">Unlocked</span>
-          </div>
 
           <div className="sa-portal-badge">
             <Lock size={13} className="lock-icon" fill="#ffca28" strokeWidth={3} />
@@ -96,7 +102,7 @@ function AdminSignUp({ onBack, onLogin, onSuccess }) {
           </div>
 
           <h1 className="sa-login-title-alt" style={{ marginBottom: '0.25rem' }}>Create Admin Account</h1>
-          <p className="sa-login-subtitle-alt" style={{ marginBottom: '2rem' }}>
+          <p className="sa-login-subtitle-alt" style={{ marginBottom: '1.5rem' }}>
             Setup requires authorization from super admin
           </p>
 
@@ -142,49 +148,74 @@ function AdminSignUp({ onBack, onLogin, onSuccess }) {
             </div>
 
             <div className="sa-group-alt">
-              <label className="sa-label-alt">Admin Role</label>
-              <select 
-                name="role"
-                className="sa-input-alt"
-                value={formData.role}
-                onChange={handleChange}
-                required
-                style={{ appearance: 'auto' }}
-              >
-                <option value="" disabled>Choose an option...</option>
-                <option value="manager">Operations Manager</option>
-                <option value="moderator">Content Moderator</option>
-                <option value="support">Senior Support</option>
-              </select>
-            </div>
-
-            <div className="sa-group-alt">
               <label className="sa-label-alt">Create Password</label>
-              <input 
-                type="password" 
-                name="password"
-                className="sa-input-alt" 
-                value={formData.password}
-                onChange={handleChange}
-                required
-                placeholder="Password"
-              />
+              <div style={{ position: 'relative' }}>
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  name="password"
+                  className="sa-input-alt" 
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  placeholder="Password"
+                  style={{ paddingRight: '48px' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: '#94a3b8'
+                  }}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
             <div className="sa-group-alt">
               <label className="sa-label-alt">Confirm Password</label>
-              <input 
-                type="password" 
-                name="confirmPassword"
-                className="sa-input-alt" 
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-                placeholder="Password"
-              />
+              <div style={{ position: 'relative' }}>
+                <input 
+                  type={showConfirmPassword ? "text" : "password"} 
+                  name="confirmPassword"
+                  className="sa-input-alt" 
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+                  placeholder="Password"
+                  style={{ paddingRight: '48px' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: '#94a3b8'
+                  }}
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginBottom: '2rem', marginTop: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '0.5rem' }}>
               <input 
                 type="checkbox" 
                 name="acceptResponsibility" 
@@ -198,8 +229,15 @@ function AdminSignUp({ onBack, onLogin, onSuccess }) {
               </label>
             </div>
 
-            <button type="submit" className="sa-btn-alt" disabled={loading}>
-              {loading ? 'Creating Account...' : 'Create Admin Account'}
+            <button type="submit" className="sa-btn-alt" disabled={loading || !formData.acceptResponsibility}>
+              {loading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" style={{ marginRight: '8px' }} />
+                  Creating Admin Account...
+                </>
+              ) : (
+                'Create Admin Account'
+              )}
             </button>
           </form>
 
@@ -209,8 +247,11 @@ function AdminSignUp({ onBack, onLogin, onSuccess }) {
         </div>
 
         {showToast && (
-          <div className="sa-toast">
-            <span className="sa-toast-message">{error}</span>
+          <div className={`sa-toast ${toastType === 'success' ? 'sa-toast-success' : 'sa-toast-error'}`}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {toastType === 'success' && <CheckCircle size={16} color="#10b981" />}
+              <span className="sa-toast-message">{error}</span>
+            </div>
             <button className="sa-toast-close" onClick={() => setShowToast(false)}>
               <X size={14} />
             </button>

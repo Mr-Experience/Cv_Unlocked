@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Lock, X } from 'lucide-react';
+import { Lock, X, Eye, EyeOff } from 'lucide-react';
 
 function SuperAdminLogin({ onLogin, onBack }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showToast, setShowToast] = useState(false);
@@ -93,14 +94,35 @@ function SuperAdminLogin({ onLogin, onBack }) {
 
               <div className="sa-group-alt">
                 <label className="sa-label-alt">Password</label>
-                <input 
-                  type="password" 
-                  className="sa-input-alt" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder=""
-                />
+                <div style={{ position: 'relative' }}>
+                  <input 
+                    type={showPassword ? "text" : "password"} 
+                    className="sa-input-alt" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    placeholder=""
+                    style={{ paddingRight: '48px' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '12px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      color: '#94a3b8'
+                    }}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <div className="sa-footer-alt">

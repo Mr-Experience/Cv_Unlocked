@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { UserCircle, X } from 'lucide-react';
+import { UserCircle, X, Loader2, CheckCircle, Eye, EyeOff } from 'lucide-react';
 
 function ClientLogin({ onBack, onSignUp, onSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState('error');
 
   // Set the page title
   useEffect(() => {
@@ -39,13 +41,20 @@ function ClientLogin({ onBack, onSignUp, onSuccess }) {
       const data = await response.json();
 
       if (data.status === 'success') {
-        onSuccess(data.user);
+        setError('Login successful! Welcome back.');
+        setToastType('success');
+        setShowToast(true);
+        setTimeout(() => {
+          onSuccess(data.user);
+        }, 1500);
       } else {
         setError(data.message || 'Invalid client credentials.');
+        setToastType('error');
         setShowToast(true);
       }
     } catch (err) {
       setError('Connection failed. Please check if the server is running.');
+      setToastType('error');
       setShowToast(true);
       console.error(err);
     } finally {
@@ -93,14 +102,35 @@ function ClientLogin({ onBack, onSignUp, onSuccess }) {
 
               <div className="sa-group-alt">
                 <label className="sa-label-alt">Password</label>
-                <input 
-                  type="password" 
-                  className="sa-input-alt" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder=""
-                />
+                <div style={{ position: 'relative' }}>
+                  <input 
+                    type={showPassword ? "text" : "password"} 
+                    className="sa-input-alt" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    placeholder=""
+                    style={{ paddingRight: '48px' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '12px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      color: '#94a3b8'
+                    }}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <div className="sa-footer-alt">
@@ -110,7 +140,14 @@ function ClientLogin({ onBack, onSignUp, onSuccess }) {
               </div>
 
               <button type="submit" className="sa-btn-alt" disabled={loading}>
-                {loading ? 'Logging in...' : 'Sign in to account'}
+                {loading ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" style={{ marginRight: '8px' }} />
+                    Logging in...
+                  </>
+                ) : (
+                  'Sign in to account'
+                )}
               </button>
             </form>
 
@@ -122,8 +159,11 @@ function ClientLogin({ onBack, onSignUp, onSuccess }) {
 
         {/* Modern Toast Notification (Disappears in 5s) */}
         {showToast && (
-          <div className="sa-toast">
-            <span className="sa-toast-message">{error}</span>
+          <div className={`sa-toast ${toastType === 'success' ? 'sa-toast-success' : 'sa-toast-error'}`}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {toastType === 'success' && <CheckCircle size={16} color="#10b981" />}
+              <span className="sa-toast-message">{error}</span>
+            </div>
             <button className="sa-toast-close" onClick={() => setShowToast(false)}>
               <X size={14} />
             </button>

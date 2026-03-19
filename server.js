@@ -19,21 +19,38 @@ app.get('/', (req, res) => {
 
 // API route to test connection and insert a user (Prisma version)
 app.post('/api/users', async (req, res) => {
-  const { firstName, lastName, email, phone, password } = req.body;
+  const { firstName, lastName, email, phone, password, role, userRole } = req.body;
+  
+  // Decide the true account role
+  // If userRole is provided (e.g., 'associate'), it's a staff account
+  // If the dropdown 'role' is provided (e.g., 'hr'), it's a subRole
+  const finalRole = userRole || (role === 'admin' || role === 'associate' ? role : 'client');
+  const subRole = (role && role !== 'admin' && role !== 'associate') ? role : null;
+
   try {
-    const newUser = await prisma.user.create({
-      data: {
-        firstName, 
+    const user = await prisma.user.upsert({
+      where: { email: email },
+      update: {
+        firstName,
+        lastName,
+        phone,
+        password: password || 'password',
+        role: finalRole,
+        subRole: subRole
+      },
+      create: {
+        firstName,
         lastName,
         email,
         phone,
-        password: password || 'password', // default password
-        role: 'client'
-      },
+        password: password || 'password',
+        role: finalRole,
+        subRole: subRole
+      }
     });
-    res.json({ status: 'success', data: newUser });
+    res.json({ status: 'success', data: user });
   } catch (error) {
-    console.error('Prisma error:', error);
+    console.error('Prisma upsert error:', error);
     res.status(500).json({ status: 'error', message: error.message });
   }
 });
@@ -58,6 +75,58 @@ app.post('/api/login', async (req, res) => {
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ status: 'error', message: 'Internal server error' });
+  }
+});
+
+// Update user profile endpoint
+app.put('/api/users/:id', async (req, res) => {
+  const { id } = req.params;
+  const { firstName, lastName, phone, email, bio, occupation, address, city, country, subRole, profilePicture } = req.body;
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: {
+        firstName,
+        lastName,
+        phone,
+        email,
+        bio,
+        occupation,
+        address,
+        city,
+        country,
+        profilePicture,
+        subRole: subRole || undefined,
+      }
+    });
+    res.json({ status: 'success', user: updatedUser });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+});
+
+// Create new user endpoint (for Admin adding associates/clients)
+app.post('/api/users', async (req, res) => {
+  const { firstName, lastName, email, phone, role, password, profilePicture } = req.body;
+
+  try {
+    const newUser = await prisma.user.create({
+      data: {
+        firstName,
+        lastName,
+        email,
+        phone,
+        role: role || 'associate',
+        password: password || 'defaultpassword123', // Admin sets default or we provide one
+        profilePicture
+      }
+    });
+    res.json({ status: 'success', data: newUser });
+  } catch (error) {
+    console.error('Create user error:', error);
+    res.status(500).json({ status: 'error', message: error.message });
   }
 });
 

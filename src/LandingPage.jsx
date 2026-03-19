@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Zap, Shield, Globe, Quote, Menu, X, UserPlus, CreditCard, UserCheck, BellRing, ChevronDown, BarChart2, Smartphone, ClipboardCheck, Lock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Quote, UserPlus, CreditCard, UserCheck, BellRing, ChevronDown, BarChart2, Smartphone, ClipboardCheck, Lock } from 'lucide-react';
+import Navbar from './Navbar';
+import Footer from './Footer';
 
 function LandingPage({ onLogin, onSignUp, onSuperAdminLogin, onAdminLogin, onAssociateLogin }) {
   const [currentQuote, setCurrentQuote] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
 
   const faqs = [
@@ -44,54 +45,9 @@ function LandingPage({ onLogin, onSignUp, onSuperAdminLogin, onAdminLogin, onAss
     return () => clearInterval(timer);
   }, []);
 
-  const closeMenu = () => setMenuOpen(false);
-
   return (
     <div className="lp-wrapper">
-      {/* ── Header ── */}
-      <nav className="lp-header-standard">
-        <div className="lp-header-inner">
-          <div className="sa-logo-brand">
-            <span className="logo-cv">CV</span>
-            <span className="logo-unlocked">Unlocked</span>
-          </div>
-
-          {/* Desktop nav */}
-          <nav className="lp-nav-links">
-            <a href="#home" className="lp-nav-link lp-nav-link--active">Home</a>
-            <a href="#find-job" className="lp-nav-link">Find Job</a>
-            <a href="#our-team" className="lp-nav-link">Our team</a>
-            <a href="#pricing" className="lp-nav-link">Our pricing</a>
-            <a href="#contact" className="lp-nav-link">Contact us</a>
-          </nav>
-
-          {/* Desktop buttons */}
-          <div className="lp-header-actions-right lp-header-actions-desktop">
-            <button className="lp-btn-login-ghost" onClick={onLogin}>Login</button>
-            <button className="lp-btn-signup-solid" onClick={onSignUp}>Register</button>
-          </div>
-
-          {/* Mobile hamburger */}
-          <button className="lp-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-
-        {/* Mobile menu drawer */}
-        {menuOpen && (
-          <div className="lp-mobile-menu">
-            <a href="#home" className="lp-mobile-link lp-nav-link--active" onClick={closeMenu}>Home</a>
-            <a href="#find-job" className="lp-mobile-link" onClick={closeMenu}>Find Job</a>
-            <a href="#how-it-works" className="lp-mobile-link" onClick={closeMenu}>How it works</a>
-            <a href="#pricing" className="lp-mobile-link" onClick={closeMenu}>Our pricing</a>
-            <a href="#contact" className="lp-mobile-link" onClick={closeMenu}>Contact us</a>
-            <div className="lp-mobile-menu-actions">
-              <button className="lp-btn-login-ghost" onClick={() => { onLogin(); closeMenu(); }}>Login</button>
-              <button className="lp-btn-signup-solid" onClick={() => { onSignUp(); closeMenu(); }}>Register</button>
-            </div>
-          </div>
-        )}
-      </nav>
+      <Navbar onLogin={onLogin} onSignUp={onSignUp} activePage="home" />
 
       {/* ── Hero Section ── */}
       {/* ── Hero Section (Winged Arrangement) ── */}
@@ -226,7 +182,7 @@ function LandingPage({ onLogin, onSignUp, onSuperAdminLogin, onAdminLogin, onAss
             <p className="lp-partner-desc">
               Whether you're a recruiter, staffing agency, or career coach — partnering with us puts your network to work. We bring the candidates, you bring the opportunity. Together we close more offers, faster.
             </p>
-            <button className="lp-partner-btn" onClick={onSignUp}>
+            <button className="lp-partner-btn" onClick={() => window.location.href = '/partner'}>
               Become a Partner <span>→</span>
             </button>
           </div>
@@ -236,8 +192,6 @@ function LandingPage({ onLogin, onSignUp, onSuperAdminLogin, onAdminLogin, onAss
           </div>
         </div>
       </section>
-
-
 
       {/* ── What Sets Us Apart ── */}
       <section className="lp-apart-section">
@@ -374,63 +328,12 @@ function LandingPage({ onLogin, onSignUp, onSuperAdminLogin, onAdminLogin, onAss
         </div>
       </section>
 
-      {/* ── Footer ── */}
-      <footer className="lp-footer">
-        <div className="lp-footer-top">
-          {/* Newsletter */}
-          <div className="lp-footer-col lp-footer-newsletter">
-            <div className="lp-footer-logo">
-              <span className="logo-cv">CV</span>
-              <span className="logo-unlocked">Unlocked</span>
-            </div>
-            <p className="lp-footer-newsletter-text">Subscribe to our newsletter</p>
-            <div className="lp-footer-subscribe">
-              <input type="email" placeholder="Email" className="lp-footer-input" />
-              <button className="lp-footer-sub-btn">Subscribe</button>
-            </div>
-          </div>
-
-          {/* Col 2 */}
-          <div className="lp-footer-col">
-            <h4 className="lp-footer-heading">Work With Us</h4>
-            <ul className="lp-footer-links">
-              <li><a href="#">How it works</a></li>
-              <li><a href="#">Find a job</a></li>
-              <li><a href="#">Our pricing</a></li>
-              <li><a href="#">Become a partner</a></li>
-              <li><a href="#">Refer a friend</a></li>
-            </ul>
-          </div>
-
-          <div className="lp-footer-col">
-            <h4 className="lp-footer-heading">Portal Access</h4>
-            <ul className="lp-footer-links">
-              <li><a href="#" onClick={onSuperAdminLogin}>Super Admin Login</a></li>
-              <li><a href="#" onClick={onAdminLogin}>Admin Portal</a></li>
-              <li><a href="#" onClick={onAssociateLogin}>Associate Login</a></li>
-              <li><a href="#" onClick={onLogin}>Client Login</a></li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Contact bar */}
-        <div className="lp-footer-contact-bar">
-          <span>hello@cvunlocked.com</span>
-          <span className="lp-footer-dot">·</span>
-          <span>Support available Mon – Fri, 9am – 6pm WAT</span>
-          <span className="lp-footer-dot">·</span>
-          <span>Remote — serving candidates globally</span>
-        </div>
-
-        {/* Copyright */}
-        <div className="lp-footer-bottom">
-          <span>© 2026 CV Unlocked. All rights reserved.</span>
-          <div className="lp-footer-legal">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-          </div>
-        </div>
-      </footer>
+      <Footer 
+        onSuperAdminLogin={onSuperAdminLogin}
+        onAdminLogin={onAdminLogin}
+        onAssociateLogin={onAssociateLogin}
+        onLogin={onLogin}
+      />
     </div>
   );
 }
