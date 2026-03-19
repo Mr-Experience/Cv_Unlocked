@@ -67,6 +67,7 @@ const AssociateClientList = ({
   setNewUserForm,
   handleAddNewAssociate,
   handleModalImageUpload,
+  handleFormChange,
   fullName
 }) => {
   const clients = allUsers.filter(u => u.role === 'client' && u.associateAssigned === fullName);
@@ -231,29 +232,114 @@ const AssociateClientList = ({
   );
 };
 
-const AssociateApplicationTracker = () => (
-  <div className="apps-view">
-    <div className="view-header-flex">
-      <h1 className="welcome-title">Job Application</h1>
-      <button className="btn-add" style={{ background: '#B91C1C' }}><Plus size={18} /> Add Application</button>
-    </div>
+const AssociateApplicationTracker = ({ allUsers, fullName }) => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newAppForm, setNewAppForm] = useState({
+    clientName: '',
+    jobTitle: '',
+    company: '',
+    appliedDate: new Date().toISOString().split('T')[0],
+    status: 'Applied',
+    notes: ''
+  });
 
-    <div className="job-apps-controls">
-      <div className="search-input-wrapper">
-        <input type="text" className="search-input" placeholder="Type here..." />
-      </div>
-      <button className="filter-outline-btn">Filter by Client</button>
-      <button className="filter-outline-btn">Filter by Status</button>
-    </div>
+  const clients = allUsers.filter(u => u.role === 'client');
 
-    <div className="table-container">
-      <div className="apps-table-header" style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', padding: '16px 24px', background: '#FFF9F5', fontWeight: '700', borderBottom: '1px solid var(--border-color)' }}>
-        <span>Client</span><span>Job Title</span><span>Company</span><span>Applied Date</span><span>Status</span><span>Action</span>
+  const handleAppSubmit = (e) => {
+    e.preventDefault();
+    setIsAddModalOpen(false);
+    // Placeholder for actual submit logic
+  };
+
+  return (
+    <div className="apps-view">
+      <div className="view-header-flex">
+        <h1 className="welcome-title">Job Application</h1>
+        <button className="btn-add" onClick={() => setIsAddModalOpen(true)} style={{ background: '#B91C1C' }}><Plus size={18} /> Add Application</button>
       </div>
-      <div style={{ padding: '40px', textAlign: 'center', color: '#64748B' }}>Showing 1-8 of 24 applications</div>
+
+      <div className="job-apps-controls" style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
+        <div className="search-input-wrapper" style={{ flex: 1, position: 'relative' }}>
+          <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748B' }} />
+          <input type="text" className="search-input" placeholder="Type here..." style={{ paddingLeft: '40px', width: '100%' }} />
+        </div>
+        <button className="filter-outline-btn" style={{ border: '1px solid #991B1B', color: '#991B1B', padding: '0 20px', borderRadius: '8px' }}>Filter by Client</button>
+        <button className="filter-outline-btn" style={{ border: '1px solid #991B1B', color: '#991B1B', padding: '0 20px', borderRadius: '8px' }}>Filter by Status</button>
+      </div>
+
+      <div className="table-container" style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', border: '1px solid #E2E8F0' }}>
+        <div className="apps-table-header" style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', padding: '16px 24px', background: '#FFF9F5', fontWeight: '700', borderBottom: '1px solid #E2E8F0' }}>
+          <span>Client</span><span>Job Title</span><span>Company</span><span>Applied Date</span><span>Status</span><span>Action</span>
+        </div>
+        <div style={{ padding: '60px', textAlign: 'center', color: '#64748B' }}>
+          <Briefcase size={40} style={{ opacity: 0.2, marginBottom: '12px' }} />
+          <p>No applications tracked yet. Click "Add Application" to start.</p>
+        </div>
+      </div>
+
+      {isAddModalOpen && (
+        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100, backdropFilter: 'blur(4px)' }}>
+          <div className="modal-content" style={{ background: 'white', padding: '0', borderRadius: '16px', width: '95%', maxWidth: '800px', maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+            <div style={{ padding: '24px 32px', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, background: 'white', zIndex: 10 }}>
+              <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#0F172A' }}>Track New Job Application</h2>
+              <button onClick={() => setIsAddModalOpen(false)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#64748B' }}><CloseIcon size={24} /></button>
+            </div>
+            
+            <form onSubmit={handleAppSubmit} style={{ padding: '32px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px', color: '#1E293B' }}>Basic Information</h3>
+                  <div className="input-group-alt" style={{ marginBottom: '20px' }}>
+                    <label className="sa-label-alt" style={{ color: '#1E293B', fontWeight: '600' }}>Select Client *</label>
+                    <select className="sa-input-alt" required value={newAppForm.clientName} onChange={(e) => setNewAppForm({...newAppForm, clientName: e.target.value})}>
+                      <option value="">Choose Client</option>
+                      {clients.map(c => <option key={c.id} value={`${c.firstName} ${c.lastName}`}>{c.firstName} {c.lastName}</option>)}
+                    </select>
+                  </div>
+                  <div className="input-group-alt" style={{ marginBottom: '20px' }}>
+                    <label className="sa-label-alt" style={{ color: '#1E293B', fontWeight: '600' }}>Job Title *</label>
+                    <input type="text" className="sa-input-alt" required value={newAppForm.jobTitle} onChange={(e) => setNewAppForm({...newAppForm, jobTitle: e.target.value})} placeholder="Software Engineer" />
+                  </div>
+                  <div className="input-group-alt" style={{ marginBottom: '20px' }}>
+                    <label className="sa-label-alt" style={{ color: '#1E293B', fontWeight: '600' }}>Company Name *</label>
+                    <input type="text" className="sa-input-alt" required value={newAppForm.company} onChange={(e) => setNewAppForm({...newAppForm, company: e.target.value})} placeholder="Tech Corp" />
+                  </div>
+                </div>
+
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px', color: '#1E293B' }}>Application Details</h3>
+                  <div className="input-group-alt" style={{ marginBottom: '20px' }}>
+                    <label className="sa-label-alt" style={{ color: '#1E293B', fontWeight: '600' }}>Applied Date *</label>
+                    <input type="date" className="sa-input-alt" required value={newAppForm.appliedDate} onChange={(e) => setNewAppForm({...newAppForm, appliedDate: e.target.value})} />
+                  </div>
+                  <div className="input-group-alt" style={{ marginBottom: '20px' }}>
+                    <label className="sa-label-alt" style={{ color: '#1E293B', fontWeight: '600' }}>Status *</label>
+                    <select className="sa-input-alt" required value={newAppForm.status} onChange={(e) => setNewAppForm({...newAppForm, status: e.target.value})}>
+                      <option value="Applied">Applied</option>
+                      <option value="Interviewing">Interviewing</option>
+                      <option value="Offer Extended">Offer Extended</option>
+                      <option value="Rejected">Rejected</option>
+                      <option value="Withdrawn">Withdrawn</option>
+                    </select>
+                  </div>
+                  <div className="input-group-alt">
+                    <label className="sa-label-alt" style={{ color: '#1E293B', fontWeight: '600' }}>Additional Notes</label>
+                    <textarea className="sa-input-alt" style={{ minHeight: '100px' }} value={newAppForm.notes} onChange={(e) => setNewAppForm({...newAppForm, notes: e.target.value})} placeholder="Notes about application link, interviewers etc..." />
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end', marginTop: '40px' }}>
+                <button type="button" className="btn-secondary-outline" onClick={() => setIsAddModalOpen(false)} style={{ color: '#991B1B', borderColor: '#991B1B' }}>Cancel</button>
+                <button type="submit" className="btn-primary-solid" style={{ background: '#FDBA74', border: 'none', color: 'white', minWidth: '160px' }}>Track Application</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
-  </div>
-);
+  );
+};
 
 const AssociateResourceLibrary = () => (
   <div className="docs-view">
@@ -489,11 +575,11 @@ function AssociateDashboard({ user, onLogout }) {
           newUserForm={newUserForm}
           setNewUserForm={setNewUserForm}
           handleAddNewAssociate={handleAddNewAssociate}
-          handleModalImageUpload={handleModalImageUpload}
+          handleFormChange={handleFormChange}
           fullName={fullName}
         />
       );
-      case 'applications': return <AssociateApplicationTracker />;
+      case 'applications': return <AssociateApplicationTracker allUsers={allUsers} fullName={fullName} />;
       case 'documents': return <AssociateResourceLibrary />;
       case 'notes': return <AssociateNotesLog noteContent={noteContent} setNoteContent={setNoteContent} setToast={setToast} />;
       case 'profile': return <AssociateProfileSettings profileData={profileData} handleProfileChange={handleProfileChange} handleImageUpload={handleImageUpload} handleSaveProfile={handleSaveProfile} isEditing={isEditing} setIsEditing={setIsEditing} isSaving={isSaving} toast={toast} fullName={fullName} />;

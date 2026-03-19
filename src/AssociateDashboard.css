@@ -474,7 +474,34 @@
   }
 }
 
-/* Hide toggle on desktop */
-.mobile-menu-toggle {
-  display: none;
+/* Modal Responsiveness */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    padding-bottom: 80px !important;
+  }
+  
+  .modal-content form {
+    padding: 20px !important;
+  }
+
+  .modal-content form > div {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+}
+
+/* Profiles */
+.user-profile-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--bg-light);
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }

@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -22,7 +23,7 @@ model User {
   occupation            String?
   city                  String?
   country               String?
-  profilePicture        String?   @db.LongText
+  profilePicture        String?   @db.Text
   status                String    @default("active")
   
   // New Fields from UI
@@ -36,7 +37,7 @@ model User {
   clientAssigned        String?
   coverLetter           String?   @db.Text
   createdBy             String?
-  cvResume              String?   @db.VarChar(500)
+  cvResume              String?   @db.Text
   department            String?
   dob                   DateTime?
   drivesLicense        Boolean?  @default(false)
@@ -47,7 +48,7 @@ model User {
   gender                String?
   jobLevel              String?
   jobTitle              String?
-  linkedinUrl           String?   @db.VarChar(500)
+  linkedinUrl           String?   @db.Text
   memberSince           DateTime? @default(now())
   notes                 String?   @db.Text
   backgroundCheck       String?
