@@ -135,27 +135,94 @@ const AssociateClientList = ({
       </div>
 
       {isAddClientModalOpen && (
-        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100 }}>
-          <div className="modal-content" style={{ background: 'white', padding: '32px', borderRadius: '12px', width: '90%', maxWidth: '500px', position: 'relative' }}>
-            <button onClick={() => setIsAddClientModalOpen(false)} style={{ position: 'absolute', top: '16px', right: '16px', border: 'none', background: 'transparent', cursor: 'pointer' }}><CloseIcon size={24} color="#64748B" /></button>
-            <h2 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '12px', textAlign: 'center' }}>Register New Client</h2>
-            <p style={{ textAlign: 'center', color: '#64748B', marginBottom: '24px', fontSize: '14px' }}>Submit details for your assigned client</p>
-            <form onSubmit={handleAddNewAssociate}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '24px' }}>
-                <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', border: '2px dashed #CBD5E1' }}>
-                  {newUserForm.profilePicture ? <img src={newUserForm.profilePicture} alt="Pfp" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User size={40} color="#CBD5E1" />}
-                  <label htmlFor="clientImgUpl" style={{ position: 'absolute', bottom: 0, right: 0, padding: '6px', background: 'var(--primary-orange)', color: 'white', borderRadius: '50%', cursor: 'pointer' }}><Camera size={14} /></label>
+        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100, backdropFilter: 'blur(4px)' }}>
+          <div className="modal-content" style={{ background: 'white', padding: '0', borderRadius: '16px', width: '95%', maxWidth: '1000px', maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+            <div style={{ padding: '24px 32px', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, background: 'white', zIndex: 10 }}>
+              <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#0F172A' }}>Register New Client</h2>
+              <button onClick={() => setIsAddClientModalOpen(false)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#64748B' }}><CloseIcon size={24} /></button>
+            </div>
+            
+            <form onSubmit={handleAddNewAssociate} style={{ padding: '32px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '40px' }}>
+                {/* LEFT COLUMN: PERSONAL & JOB PREFS */}
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px', color: '#1E293B' }}>Personal Information</h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+                     <div className="input-group-alt"><label className="sa-label-alt">Last Name *</label><input type="text" name="lastName" required className="sa-input-alt" value={newUserForm.lastName} onChange={handleFormChange} placeholder="Type here..." /></div>
+                     <div className="input-group-alt"><label className="sa-label-alt">First Name *</label><input type="text" name="firstName" required className="sa-input-alt" value={newUserForm.firstName} onChange={handleFormChange} placeholder="Type here..." /></div>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+                     <div className="input-group-alt"><label className="sa-label-alt">E-mail Address *</label><input type="email" name="email" required className="sa-input-alt" value={newUserForm.email} onChange={handleFormChange} placeholder="user@example.com" /></div>
+                     <div className="input-group-alt"><label className="sa-label-alt">Phone Number</label><input type="text" name="phone" className="sa-input-alt" value={newUserForm.phone} onChange={handleFormChange} placeholder="user@example.com" /></div>
+                  </div>
+                  <div className="input-group-alt" style={{ marginBottom: '20px' }}><label className="sa-label-alt">Address</label><input type="text" name="address" className="sa-input-alt" value={newUserForm.address} onChange={handleFormChange} placeholder="12 oregan street" /></div>
+                  <div className="input-group-alt" style={{ marginBottom: '20px' }}><label className="sa-label-alt">Linkedin URL*</label><input type="text" name="linkedinUrl" required className="sa-input-alt" value={newUserForm.linkedinUrl} onChange={handleFormChange} placeholder="linkedin.com/in/user" /></div>
+                  <div className="input-group-alt" style={{ marginBottom: '32px' }}><label className="sa-label-alt">Password *</label><input type="password" name="password" required className="sa-input-alt" value={newUserForm.password} onChange={handleFormChange} placeholder="Create password" /></div>
+
+                  <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px', color: '#1E293B' }}>Job Preferences</h3>
+                  <div className="input-group-alt" style={{ marginBottom: '16px' }}><label className="sa-label-alt">Preferred Job Title</label><input type="text" name="preferredJobTitle" className="sa-input-alt" value={newUserForm.preferredJobTitle} onChange={handleFormChange} placeholder="Type here..." /></div>
+                  <div className="input-group-alt" style={{ marginBottom: '16px' }}><label className="sa-label-alt">Preferred Industry</label><input type="text" name="preferredIndustry" className="sa-input-alt" value={newUserForm.preferredIndustry} onChange={handleFormChange} placeholder="Type here..." /></div>
+                  <div className="input-group-alt" style={{ marginBottom: '16px' }}><label className="sa-label-alt">Preferred Location</label><input type="text" name="preferredLocation" className="sa-input-alt" value={newUserForm.preferredLocation} onChange={handleFormChange} placeholder="Type here..." /></div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                     <div className="input-group-alt"><label className="sa-label-alt">Salary Expectation Min</label><input type="text" name="salaryExpectationMin" className="sa-input-alt" value={newUserForm.salaryExpectationMin} onChange={handleFormChange} placeholder="Type here..." /></div>
+                     <div className="input-group-alt"><label className="sa-label-alt">Salary Expectation Max</label><input type="text" name="salaryExpectationMax" className="sa-input-alt" value={newUserForm.salaryExpectationMax} onChange={handleFormChange} placeholder="Type here..." /></div>
+                  </div>
                 </div>
-                <input type="file" id="clientImgUpl" accept="image/*" style={{ display: 'none' }} onChange={handleModalImageUpload} />
+
+                {/* RIGHT COLUMN: CERTIFICATION & ASSIGNMENT */}
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px', color: '#1E293B' }}>Certification & Assignment</h3>
+                  <div className="input-group-alt" style={{ marginBottom: '20px' }}>
+                    <label className="sa-label-alt">Certifications</label>
+                    <textarea name="certifications" className="sa-input-alt" style={{ minHeight: '80px' }} value={newUserForm.certifications} onChange={handleFormChange} placeholder="Type here..." />
+                  </div>
+                  <div className="input-group-alt" style={{ marginBottom: '20px' }}>
+                    <label className="sa-label-alt">Assign to Associate</label>
+                    <input type="text" className="sa-input-alt" value={fullName} disabled style={{ background: '#F8FAFC' }} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+                     <div className="input-group-alt"><label className="sa-label-alt">Preferred Location</label><input type="text" name="preferredLocation" className="sa-input-alt" value={newUserForm.preferredLocation} onChange={handleFormChange} placeholder="Type here..." /></div>
+                     <div className="input-group-alt">
+                       <label className="sa-label-alt">Duration</label>
+                       <select name="duration" className="sa-input-alt" value={newUserForm.duration} onChange={handleFormChange}>
+                         <option value="1 Month">1 Month</option>
+                         <option value="3 Months">3 Months</option>
+                         <option value="6 Months">6 Months</option>
+                       </select>
+                     </div>
+                  </div>
+                  <div className="input-group-alt" style={{ marginBottom: '32px' }}>
+                    <label className="sa-label-alt">Payment Status *</label>
+                    <select name="paymentStatus" required className="sa-input-alt" value={newUserForm.paymentStatus} onChange={handleFormChange}>
+                      <option value="">Select Plan</option>
+                      <option value="Premium Plan - ₦50,000/month">Premium Plan - ₦50,000/month</option>
+                      <option value="Standard Plan - ₦30,000/month">Standard Plan - ₦30,000/month</option>
+                    </select>
+                  </div>
+
+                  <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px', color: '#1E293B' }}>Application Documents</h3>
+                  <div className="input-group-alt" style={{ marginBottom: '32px' }}>
+                    <label className="sa-label-alt">CV/Resume Used *</label>
+                    <div style={{ border: '1px solid #E2E8F0', borderRadius: '8px', padding: '20px', textAlign: 'center', cursor: 'pointer' }} onClick={() => document.getElementById('assocCvUpl').click()}>
+                      <span style={{ color: '#64748B' }}>Upload CV</span>
+                      <input type="file" id="assocCvUpl" style={{ display: 'none' }} onChange={(e) => {
+                        const file = e.target.files[0];
+                        if(file) setNewUserForm({...newUserForm, cvResume: file.name});
+                      }} />
+                      {newUserForm.cvResume && <p style={{ marginTop: '8px', color: 'var(--primary-orange)', fontWeight: '600' }}>{newUserForm.cvResume}</p>}
+                    </div>
+                  </div>
+
+                  <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px', color: '#1E293B' }}>Notes</h3>
+                  <textarea name="notes" className="sa-input-alt" style={{ minHeight: '60px', marginBottom: '32px' }} value={newUserForm.notes} onChange={handleFormChange} placeholder="additional notes about this client..." />
+
+                  <div style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end' }}>
+                    <button type="button" className="btn-secondary-outline" onClick={() => setIsAddClientModalOpen(false)} style={{ color: '#991B1B', borderColor: '#991B1B' }}>Cancel</button>
+                    <button type="button" className="btn-secondary-outline" style={{ color: '#991B1B', borderColor: '#991B1B' }}>Save as Draft</button>
+                    <button type="submit" className="btn-primary-solid" style={{ background: '#FDBA74', border: 'none', color: 'white' }}>Submit Application</button>
+                  </div>
+                </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-                <input type="text" className="search-input" placeholder="First Name" required value={newUserForm.firstName} onChange={(e) => setNewUserForm({...newUserForm, firstName: e.target.value})} style={{ paddingLeft: '12px' }} />
-                <input type="text" className="search-input" placeholder="Last Name" required value={newUserForm.lastName} onChange={(e) => setNewUserForm({...newUserForm, lastName: e.target.value})} style={{ paddingLeft: '12px' }} />
-              </div>
-              <input type="email" className="search-input" placeholder="Email Address" required value={newUserForm.email} onChange={(e) => setNewUserForm({...newUserForm, email: e.target.value})} style={{ paddingLeft: '12px', marginBottom: '16px' }} />
-              <input type="password" className="search-input" placeholder="Create Password" required value={newUserForm.password} onChange={(e) => setNewUserForm({...newUserForm, password: e.target.value})} style={{ paddingLeft: '12px', marginBottom: '16px' }} />
-              <input type="text" className="search-input" placeholder="Phone Number" value={newUserForm.phone} onChange={(e) => setNewUserForm({...newUserForm, phone: e.target.value})} style={{ paddingLeft: '12px', marginBottom: '24px' }} />
-              <button type="submit" className="btn-primary-solid" style={{ width: '100%', justifyContent: 'center', height: '48px', background: 'var(--primary-orange)' }}>Complete Registration</button>
             </form>
           </div>
         </div>
@@ -301,7 +368,20 @@ function AssociateDashboard({ user, onLogout }) {
     phone: '',
     password: 'password123',
     role: 'client',
-    profilePicture: ''
+    profilePicture: '',
+    address: '',
+    linkedinUrl: '',
+    preferredJobTitle: '',
+    preferredIndustry: '',
+    preferredLocation: '',
+    salaryExpectationMin: '',
+    salaryExpectationMax: '',
+    certifications: '',
+    associateAssigned: '',
+    duration: '1 Month',
+    paymentStatus: '',
+    cvResume: '',
+    notes: ''
   });
   const [profileData, setProfileData] = useState({
     firstName: user?.firstName || '',
@@ -315,6 +395,11 @@ function AssociateDashboard({ user, onLogout }) {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setNewUserForm(prev => ({ ...prev, [name]: value }));
+  };
 
   const fetchUsers = async () => {
     try {
@@ -341,7 +426,7 @@ function AssociateDashboard({ user, onLogout }) {
         setToast({ show: true, message: 'Client account created!', type: 'success' });
         setIsAddClientModalOpen(false);
         fetchUsers();
-        setNewUserForm({ firstName: '', lastName: '', email: '', phone: '', password: 'password123', role: 'client', profilePicture: '' });
+        setNewUserForm({ firstName: '', lastName: '', email: '', phone: '', password: 'password123', role: 'client', profilePicture: '', address: '', linkedinUrl: '', preferredJobTitle: '', preferredIndustry: '', preferredLocation: '', salaryExpectationMin: '', salaryExpectationMax: '', certifications: '', associateAssigned: '', duration: '1 Month', paymentStatus: '', cvResume: '', notes: '' });
       }
     } catch (err) { setToast({ show: true, message: 'Server error', type: 'error' }); }
     finally { setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000); }
